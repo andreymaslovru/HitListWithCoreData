@@ -10,18 +10,33 @@ import CoreData
 
 
 class ViewController: UIViewController, UITableViewDataSource {
-  
+    
     var people = [NSManagedObject]()
-
+    
+    func saveName (name: String) {
+        let managedContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Person", in: managedContext)
+        
+        let person = NSManagedObject(entity: entity!, insertInto: managedContext)
+        
+        person.setValue(name, forKey: "name")
+        
+        people.append(person)
+    }
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func addAuction(_ sender: Any) {
         
+        
+        
         let alert = UIAlertController(title: "New name", message: "Add a new name", preferredStyle: .alert)
+        
         let saveAction = UIAlertAction(title: "Save", style: .default) {
             (action: UIAlertAction!) -> Void in
             let textField = alert.textFields![0] as! UITextField
-            self.names.append(textField.text ?? "")
+            self.saveName(name: textField.text ?? "")
             self.tableView.reloadData()
         }
         
